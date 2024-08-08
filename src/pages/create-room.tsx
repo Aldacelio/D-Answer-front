@@ -1,9 +1,21 @@
 import { ArrowRight } from 'lucide-react'
 
-import logo from '../assets/logo.png';
+import logo from '../assets/logo.png'
+import { useNavigate } from 'react-router-dom'
  
 
 export function CreateRoom() {
+
+    const navigate = useNavigate()
+
+    function handleCreateRoom(data : FormData) {
+        const theme = data.get('theme')?.toString()
+        console.log(theme)
+
+        navigate('/room/new')
+    }
+
+
     return (
         <main className="h-screen flex items-center justify-center px-4">
             <div className="max-w-[450px] items-center flex flex-col gap-4">
@@ -12,7 +24,7 @@ export function CreateRoom() {
                     crie uma sala pública na D-Answer e priorize as perguntas mais importantes para a comunidade.
                 </p>   
 
-                <form className="w-full flex items-center gap-2 bg-zinc-900 p-2 rounded-xl border border-zinc-800 ring-orange-400 ring-offset-0 ring-offset-zinc-900 focus-within:ring-1">
+                <form action={handleCreateRoom} className="w-full flex items-center gap-2 bg-zinc-900 p-2 rounded-xl border border-zinc-800 ring-orange-400 ring-offset-0 ring-offset-zinc-900 focus-within:ring-1">
                     <input 
                         type="text"
                         name="theme"
