@@ -6,74 +6,76 @@ import { toast } from "sonner";
 import { removeMessageReaction } from "../http/remove-message-reaction";
 
 interface MessageProps {
-  id: string;
-  text: string;
-  amoutOfReactions: number;
-  answered?: boolean;
+  id: string
+  text: string
+  amountOfReactions: number
+  answered?: boolean
 }
 
-export function Message({
-  id: messageId,
-  text,
-  amoutOfReactions,
+export function Message({ 
+  id: messageId, 
+  text, 
+  amountOfReactions, 
   answered = false,
 }: MessageProps) {
-  const [hasReacted, setHasReacted] = useState(false);
-  const { roomId } = useParams();
+  const { roomId } = useParams()
+  const [hasReacted, setHasReacted] = useState(false)
 
   if (!roomId) {
-    throw new Error("Room id is required");
+    throw new Error('Messages components must be used within room page')
   }
 
   async function createMessageReactionAction() {
     if (!roomId) {
-      return;
+      return
     }
+
     try {
-      await createMessageReaction({ roomId, messageId });
+      await createMessageReaction({ messageId, roomId })
     } catch {
-      toast.error("Houve um erro ao curtir a pergunta. Tente novamente");
+      toast.error('Falha ao reagir mensagem, tente novamente!')
     }
-    setHasReacted(true);
+
+    setHasReacted(true)
   }
 
   async function removeMessageReactionAction() {
     if (!roomId) {
-      return;
+      return
     }
+
     try {
-      await removeMessageReaction({ roomId, messageId });
+      await removeMessageReaction({ messageId, roomId })
     } catch {
-      toast.error("Houve um erro ao remover curtida na pergunta. Tente novamente");
+      toast.error('Falha ao remover reação, tente novamente!')
     }
-    setHasReacted(false);
+
+    setHasReacted(false)
   }
 
   return (
-    <li
-      data-answered={answered}
-      className="ml-4 leading-relaxed text-zinc-100 data-[answered=true]:opacity-50 data-[answered=true]:pointer-events-none"
-    >
+    <li data-answered={answered} className="ml-4 leading-relaxed text-zinc-100 data-[answered=true]:opacity-50 data-[answered=true]:pointer-events-none">
       {text}
+
       {hasReacted ? (
-        <button
-          onClick={removeMessageReactionAction}
-          type="button"
+        <button 
+          type="button" 
+          onClick={removeMessageReactionAction} 
           className="mt-3 flex items-center gap-2 text-orange-400 text-sm font-medium hover:text-orange-500"
         >
           <ArrowUp className="size-4" />
-          Curtir pergunta ({amoutOfReactions})
+          Curtir pergunta ({amountOfReactions})
         </button>
       ) : (
-        <button
-          onClick={createMessageReactionAction}
-          type="button"
+        <button 
+          type="button" 
+          onClick={createMessageReactionAction} 
           className="mt-3 flex items-center gap-2 text-zinc-400 text-sm font-medium hover:text-zinc-300"
         >
           <ArrowUp className="size-4" />
-          Curtir pergunta ({amoutOfReactions})
+          Curtir pergunta ({amountOfReactions})
         </button>
       )}
     </li>
-  );
+  )
 }
