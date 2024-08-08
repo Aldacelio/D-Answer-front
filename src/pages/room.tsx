@@ -2,9 +2,22 @@ import { useParams } from "react-router-dom"
 
 import logo from '../assets/logo.png'
 import { ArrowRight, ArrowUp, Share2 } from "lucide-react"
+import { toast } from "sonner"
 
 export function Room() {
     const {roomId} = useParams()
+
+    function handleShareRoom() {
+        const url = window.location.href.toString()
+
+        if(navigator.share != undefined && navigator.canShare()){
+            navigator.share({ url })
+        }else{
+            navigator.clipboard.writeText(url)
+
+            toast.info('The room URL was copied to your clipboard!')
+        }
+    }
 
     return (
         <div className="mx-auto max-w-[640px] flex flex-col gap-6 py-10 px-4">
@@ -15,7 +28,7 @@ export function Room() {
                     Código da sala: <span className="text-zinc-300">{roomId}</span>
                 </span>
 
-                <button type="submit" className="ml-auto bg-zinc-800 text-zinc-300 px-3 py-1.5 gap-1.5 flex items-center rounded-lg font-medium text-sm hover:bg-zinc-700 transition-colors">
+                <button onClick={handleShareRoom} type="submit" className="ml-auto bg-zinc-800 text-zinc-300 px-3 py-1.5 gap-1.5 flex items-center rounded-lg font-medium text-sm hover:bg-zinc-700 transition-colors">
                     Compartilhar
                     <Share2 className="size-4" />
                 </button>
