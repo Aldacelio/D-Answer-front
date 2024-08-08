@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { ArrowRight, Share2 } from "lucide-react";
 import { toast } from "sonner";
-import { Message } from "../components/message";
+import { Messages } from "../components/messages";
+import { Suspense } from "react";
 
 export function Room() {
   const { roomId } = useParams();
@@ -59,26 +60,9 @@ export function Room() {
         </button>
       </form>
 
-      <ol className="list-decimal list-outside px-3 space-y-8">
-        <Message
-          text="O que é Golang e quais suas principais vantagens em comparação com outras
-                linguagens de programação como Python, Java ou C++?"
-          amoutOfReactions={50}
-          answered
-        />
-
-        <Message
-          text="Quais são os principais casos de uso do Golang e por que ele é escolhido em 
-                vez de outras linguagens como JavaScript, Ruby ou PHP?"
-          amoutOfReactions={25}
-        />
-
-        <Message
-          text="Como o desempenho do Golang se compara com linguagens como Rust, C# e Java em 
-                aplicações de alto desempenho e sistemas distribuídos?"
-          amoutOfReactions={15}
-        />
-      </ol>
+      <Suspense fallback={<p>Carregando...</p>}>
+        <Messages />
+      </Suspense>
     </div>
   );
 }
